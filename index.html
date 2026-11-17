@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUSHI WORLD 🍣</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #101014;
+  color: white;
+  text-align: center;
+  transition: .3s;
+}
+
+header {
+  padding: 25px;
+  background: linear-gradient(135deg,#ff4d6d,#ff914d);
+}
+
+header h1 {
+  font-size: 42px;
+  margin: 5px;
+}
+
+nav {
+  padding: 15px;
+  background: #1c1c24;
+  position: sticky;
+  top: 0;
+}
+
+nav a {
+  color: white;
+  margin: 12px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+section {
+  padding: 45px 20px;
+}
+
+.card {
+  background: #20202a;
+  border-radius: 18px;
+  padding: 25px;
+  max-width: 650px;
+  margin: 20px auto;
+  box-shadow: 0 5px 25px #0005;
+}
+
+button {
+  background: #ff5573;
+  border: none;
+  padding: 13px 22px;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 8px;
+}
+
+button:hover {
+  background: #ff8050;
+  transform: scale(1.04);
+}
+
+input {
+  padding: 13px;
+  border-radius: 9px;
+  border: none;
+  width: 75%;
+  max-width: 400px;
+}
+
+.sushi {
+  font-size: 75px;
+}
+
+#chat {
+  min-height: 80px;
+  padding: 15px;
+  line-height: 1.6;
+}
+
+footer {
+  background: #20202a;
+  padding: 25px;
+  color: #aaa;
+}
+
+.light {
+  background: #fff0e8;
+  color: #28202a;
+}
+
+.light .card,
+.light nav,
+.light footer {
+  background: #ffe0d2;
+  color: #28202a;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🍣 SUSHI WORLD 🍣</h1>
+  <p>Deine Welt voller Sushi, Spaß und Geheimnisse!</p>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#sorten">Sushi</a>
+  <a href="#quiz">Quiz</a>
+  <a href="#ki">Sushi-KI</a>
+</nav>
+
+<section id="home">
+  <div class="sushi">🍣 🍱 🍥</div>
+  <h2>Willkommen in Sushi World!</h2>
+  <p>Entdecke Sushi, teste dein Wissen und chatte mit deiner eigenen Sushi-KI.</p>
+  <button onclick="document.querySelector('#ki').scrollIntoView()">
+    SushiBot öffnen 🤖
+  </button>
+  <button onclick="darkMode()">🌙 Design wechseln</button>
+</section>
+
+<section id="sorten">
+  <h2>🍱 Sushi-Sorten</h2>
+
+  <div class="card">
+    <div class="sushi">🍣</div>
+    <h3>Lachs Nigiri</h3>
+    <p>Reisbällchen mit frischem Lachs.</p>
+  </div>
+
+  <div class="card">
+    <div class="sushi">🍙</div>
+    <h3>Maki</h3>
+    <p>Reis und Füllung in einem Nori-Algenblatt.</p>
+  </div>
+
+  <div class="card">
+    <div class="sushi">🍤</div>
+    <h3>Tempura Roll</h3>
+    <p>Knusprige Rolle mit Tempura-Füllung.</p>
+  </div>
+</section>
+
+<section id="quiz">
+  <h2>🧠 Sushi-Quiz</h2>
+
+  <div class="card">
+    <h3 id="question">Was ist Nori?</h3>
+    <div id="answers">
+      <button onclick="answer(0)">Eine Alge</button>
+      <button onclick="answer(1)">Ein Fisch</button>
+      <button onclick="answer(2)">Eine Reissorte</button>
+    </div>
+    <p id="result"></p>
+    <p id="score">Punkte: 0</p>
+    <button onclick="nextQuestion()">Nächste Frage ➜</button>
+  </div>
+</section>
+
+<section id="ki">
+  <h2>🤖 SushiBot – Deine Sushi-KI</h2>
+
+  <div class="card">
+    <div class="sushi">🤖🍣</div>
+    <h3>Hallo! Ich bin SushiBot!</h3>
+    <p>Frag mich alles über Sushi!</p>
+
+    <div id="chat">
+      SushiBot: Konnichiwa! Was möchtest du wissen?
+    </div>
+
+    <input id="userInput"
+      placeholder="Schreib deine Frage..."
+      onkeydown="if(event.key==='Enter') askAI()">
+
+    <button onclick="askAI()">Senden 🚀</button>
+  </div>
+</section>
+
+<section>
+  <h2>🥚 Geheime Easter Eggs</h2>
+  <div class="card">
+    <p>Es gibt geheime Überraschungen auf dieser Website...</p>
+    <p>Kannst du sie finden?</p>
+    <button onclick="secret()">Geheimnis entdecken 👀</button>
+    <p id="secretResult"></p>
+  </div>
+</section>
+
+<footer>
+  <p>🍣 SUSHI WORLD © 2026</p>
+  <p>Made with ❤️ and Sushi</p>
+</footer>
+
+<script>
+
+// DARK MODE
+function darkMode() {
+  document.body.classList.toggle("light");
+}
+
+// QUIZ
+const questions = [
+  {
+    q:"Was ist Nori?",
+    a:["Eine Alge","Ein Fisch","Eine Reissorte"],
+    c:0
+  },
+  {
+    q:"Aus welchem Land stammt Sushi ursprünglich in seiner heutigen Form?",
+    a:["Japan","Italien","Mexiko"],
+    c:0
+  },
+  {
+    q:"Was ist Wasabi?",
+    a:["Eine scharfe Würzpaste","Ein Dessert","Ein Getränk"],
+    c:0
+  },
+  {
+    q:"Was bedeutet Nigiri?",
+    a:["Geformter Reis mit Belag","Frittierter Fisch","Algen-Suppe"],
+    c:0
+  }
+];
+
+let current = 0;
+let points = 0;
+let answered = false;
+
+function renderQuestion() {
+  answered = false;
+  document.getElementById("question").innerText = questions[current].q;
+  document.getElementById("result").innerText = "";
+
+  document.getElementById("answers").innerHTML =
+    questions[current].a.map((a,i)=>
+      `<button onclick="answer(${i})">${a}</button>`
+    ).join("");
+}
+
+function answer(i) {
+  if(answered) return;
+  answered = true;
+
+  if(i === questions[current].c) {
+    points++;
+    document.getElementById("result").innerText = "🎉 Richtig! Super!";
+  } else {
+    document.getElementById("result").innerText = "❌ Leider falsch!";
+  }
+
+  document.getElementById("score").innerText = "Punkte: " + points;
+}
+
+function nextQuestion() {
+  current = (current + 1) % questions.length;
+  renderQuestion();
+}
+
+// SUSHIBOT – LOKALE DEMO-KI
+function askAI() {
+  const input = document.getElementById("userInput");
+  const chat = document.getElementById("chat");
+  const q = input.value.trim().toLowerCase();
+
+  if(!q) return;
+
+  let response = "Das ist eine spannende Sushi-Frage! 🍣";
+
+  if(q.includes("lachs"))
+    response = "Lachs ist ein beliebter Sushi-Belag. Er wird häufig für Nigiri und Maki verwendet.";
+  else if(q.includes("wasabi"))
+    response = "Wasabi ist eine scharfe grüne Würzpaste, die oft zu Sushi serviert wird.";
+  else if(q.includes("reis"))
+    response = "Sushi-Reis ist ein spezieller, klebriger Rundkornreis, der mit Reisessig gewürzt wird.";
+  else if(q.includes("maki"))
+    response = "Maki sind Sushi-Rollen, die meistens mit Nori umwickelt werden.";
+  else if(q.includes("japan"))
+    response = "Sushi ist eng mit der japanischen Esskultur verbunden! 🇯🇵";
+  else if(q.includes("hallo") || q.includes("hi"))
+    response = "Konnichiwa! 🍣 Schön, dass du da bist!";
+
+  chat.innerHTML =
+    "Du: " + escapeHTML(input.value) +
+    "<br><br>🤖 SushiBot: " + response;
+
+  input.value = "";
+}
+
+function escapeHTML(s) {
+  return s.replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  })[c]);
+}
+
+// EASTER EGG
+let secrets = 0;
+
+function secret() {
+  secrets++;
+
+  const messages = [
+    "🥚 Du hast ein Sushi-Ei gefunden!",
+    "🐉 Der geheime Sushi-Drache bewacht die Küche!",
+    "🍣 SUSHI MASTER FREIGESCHALTET!",
+    "👑 Du bist jetzt ein Sushi-Legende!"
+  ];
+
+  document.getElementById("secretResult").innerText =
+    messages[Math.min(secrets-1,3)];
+}
+
+// GEHEIMCODE: SUSHI
+let code = "";
+document.addEventListener("keydown", e => {
+  code += e.key.toLowerCase();
+  code = code.slice(-5);
+
+  if(code === "sushi") {
+    alert("🍣 GEHEIMMODUS AKTIVIERT! Du hast den Sushi-Code gefunden!");
+    document.body.style.background = "#651b39";
+  }
+});
+
+renderQuestion();
+
+</script>
+</body>
+</html>
